@@ -1,0 +1,21 @@
+name: Verify TrapScholar
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  smoke:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm run check
+      - run: npm run benchmark
+      - run: node scripts/plot.mjs
+      - name: Ensure example experiment and chart reproduce
+        run: git diff --exit-code -- data/example-experiment.json data/example-experiment.csv assets/results-chart.svg

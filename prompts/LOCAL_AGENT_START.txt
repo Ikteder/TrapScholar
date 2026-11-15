@@ -1,0 +1,11 @@
+Continue the EXISTING TrapScholar v1.0 game from this folder; DO NOT rewrite the project or overwrite current source with a new starter. Read README.md, LOCAL_AGENT_HANDOFF.md and AGENTS.md first. Then inspect src/brain.js, src/engine.js, src/research.js, tests/, and src/game.js as needed.
+
+Already complete: 15-wave victory + endless, four hero classes, four traps, three upgrades, procedural pixel art, live learning plots, research lab, seeded experiment data, SVG visualizations, JSON import/export, sound, keyboard and mobile UI.
+
+Your first job is ONLY to verify on this Windows PC:
+1) `npm test` (expected: 26 tests) and `npm run benchmark` and `node scripts/plot.mjs`.
+2) `./scripts/start.ps1` then open http://127.0.0.1:8080 in Edge/Chrome.
+3) Verify 3 live waves, pause/resume, keyboard/touch, save import/export, research mode and CSV.
+4) If everything passes, add one small, tasteful v1.1 improvement with unit tests. Prefer role-specific animations or a tutorial first. Do not install large LLMs or unnecessary software.
+
+Constraints: zero runtime dependencies, no backend/network requirement, MIT license, no copied art, no secrets. Preserve real-game and research parity by implementing all combat mechanics in src/engine.js. Research's ward reset is an intentionally documented experimental difference. Do not claim benchmark results are general AI superiority. Do not create or push GitHub repos without explicit user instruction. Report changed files, exact tests, and remaining defects succinctly.

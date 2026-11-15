@@ -1,0 +1,208 @@
+{
+  "name": "TrapScholar",
+  "version": "1.1.0",
+  "build": "pixel-art-edition",
+  "license": "MIT",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "size": 245,
+      "sha256": "27baf5ae032acdefb555b3336e55d9c4ddb785aa5b42535c77d333f5bb9f3796"
+    },
+    {
+      "path": ".github/workflows/tests.yml",
+      "size": 616,
+      "sha256": "aa6110e0ca6f600b2b5b891e3e1f3aa5e370fbb45b5f46145331781aad088a3b"
+    },
+    {
+      "path": ".gitignore",
+      "size": 112,
+      "sha256": "b23b175b8f80e3c880ddf3c1cc7b866e2817ca1caca7cc130c932cce180d443b"
+    },
+    {
+      "path": "AGENTS.md",
+      "size": 1468,
+      "sha256": "cd91fc9730c05ac155e55f5a8dc417a0846ecb6292f2455ceaedb3d9a1ab70d3"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "size": 1685,
+      "sha256": "0e69630c25afe9537afd2ce4186c6a0cdea1e3df31630f7a5403f7a327683db0"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "size": 1399,
+      "sha256": "eaeb729678c30a43bdc138a6e90343049f62681cd4829285f742a893aac7ad6b"
+    },
+    {
+      "path": "LICENSE",
+      "size": 1076,
+      "sha256": "a23ea3bcdf240127997412fc1fc49076e9caf121300f83b53551b01dd19008c8"
+    },
+    {
+      "path": "LOCAL_AGENT_HANDOFF.md",
+      "size": 4577,
+      "sha256": "4fca90bad2ab5a943fdbaab0b4e0d0252731a2023007573e291dd6d2f754b718"
+    },
+    {
+      "path": "README.md",
+      "size": 19530,
+      "sha256": "812603d29afbfe59a4d46aa47852d31af6c13d20449a3de9230d44dc107bc2d7"
+    },
+    {
+      "path": "SECURITY.md",
+      "size": 950,
+      "sha256": "1c53b88b3a8286431776c762ac552e64fc56006d1c3923eac3c2dad120202603"
+    },
+    {
+      "path": "VERIFICATION.md",
+      "size": 3511,
+      "sha256": "ebfc82c108332b0f09142d51df7db2e4aed0dbf4dd8c3943485433e0702f9b06"
+    },
+    {
+      "path": "assets/architecture.svg",
+      "size": 2758,
+      "sha256": "d28299c8b2826d4a6b7cb883b7a02e5ba24598c1cb404a37783de91f13eef2e1"
+    },
+    {
+      "path": "assets/cover.svg",
+      "size": 3506,
+      "sha256": "32f68d34e26db3694a843755aa6d894c93cb8612fe209125b0e723c2bb2887a4"
+    },
+    {
+      "path": "assets/dashboard-pixel-v1.1.webp",
+      "size": 69204,
+      "sha256": "16603da0253ed21a652459ede1864f6a6640b66a72a176ee4af114af52ab91e5"
+    },
+    {
+      "path": "assets/favicon.svg",
+      "size": 246,
+      "sha256": "5af46989c8fa6d7bf036919d38ce183bc749974ec57bb58dbd9325cfcf526958"
+    },
+    {
+      "path": "assets/gameplay-pixel-v1.1.png",
+      "size": 16598,
+      "sha256": "9171846a945bb6625640fd38deb2aec3ab79b585b465fa69ec6200b960074b08"
+    },
+    {
+      "path": "assets/key-art.webp",
+      "size": 186934,
+      "sha256": "9bb75db01e1b57139852ee28636e32459d41722fb04fd84b8daaeaec351cab35"
+    },
+    {
+      "path": "assets/logo.webp",
+      "size": 159946,
+      "sha256": "8f2f0360fa26e3637c34944b20a167cdd774a9355753ef410c37d3f7d80e2068"
+    },
+    {
+      "path": "assets/raid-pixel-v1.1.png",
+      "size": 18239,
+      "sha256": "fa1ce7b42fdcda10d83c65713a5e27f476786e889935e402c1fe06ed042e057f"
+    },
+    {
+      "path": "assets/research-panel.png",
+      "size": 81014,
+      "sha256": "10ebe5ac7226eeb949acb9a7f77168cc48174fb99e44ed98ed150142655f67ab"
+    },
+    {
+      "path": "assets/results-chart.svg",
+      "size": 4328,
+      "sha256": "d11b6e619b1954a14f1ad429ffa9d4a3448a3cf6e8b64cfed1e0fe9ab21f25a5"
+    },
+    {
+      "path": "data/example-experiment.csv",
+      "size": 5766,
+      "sha256": "c71d3ccb778c6bf706a67c95fa452147d27e5663bdefb88d9859e8f0ab6800c4"
+    },
+    {
+      "path": "data/example-experiment.json",
+      "size": 285925,
+      "sha256": "b984057dc8b151b31120f7d181ed8cced3171ddc8d4a09afda4e2dcabf83523c"
+    },
+    {
+      "path": "index.html",
+      "size": 13227,
+      "sha256": "f3b00cbf62d4ffd6d4f0c50d92c44bc7a711aa649d0d1271ba21eede32fde0ab"
+    },
+    {
+      "path": "package.json",
+      "size": 527,
+      "sha256": "f366fa68a459252ff9f9bd58c9162896e02a352e35971cca2f63494ecfb1b049"
+    },
+    {
+      "path": "prompts/LOCAL_AGENT_START.txt",
+      "size": 1518,
+      "sha256": "320ac12e38c1a2d366111c1f8a26e2074098bca2e2f2394ccf12645dcb89110c"
+    },
+    {
+      "path": "scripts/benchmark.mjs",
+      "size": 563,
+      "sha256": "6366c94f02a622035cee0846f620751d387febb64529f30f4deda09d37440ad0"
+    },
+    {
+      "path": "scripts/plot.mjs",
+      "size": 4463,
+      "sha256": "ca4fa4303ffdca101c4addf203a6d4f67f6227d55dd03c478f3f0dd954147315"
+    },
+    {
+      "path": "scripts/start.ps1",
+      "size": 646,
+      "sha256": "42e9865fc4e2b43077bfa28a4f2c5582918a59e7655696ff676fd14f42d58171"
+    },
+    {
+      "path": "scripts/test.ps1",
+      "size": 292,
+      "sha256": "130321fdcda7b7395bffe3c14ade294d041b9ef4e5ad5881c2ee21c5492c3143"
+    },
+    {
+      "path": "src/brain.js",
+      "size": 3033,
+      "sha256": "639b5d5fb731cc67e34e6dce4c33dc5e11f8a925e341db7e6edce48032d2b1f4"
+    },
+    {
+      "path": "src/engine.js",
+      "size": 10352,
+      "sha256": "a7779fd55ad71f10e9d8d621580afae95d4318132773ec3b7b4ca8d6686e105f"
+    },
+    {
+      "path": "src/game.js",
+      "size": 29199,
+      "sha256": "086cba3256686840f59b851e1eb77d6c78ee3e683136bdc566200d3ab509fe17"
+    },
+    {
+      "path": "src/pixel-art.js",
+      "size": 8744,
+      "sha256": "5007adcce5b546dfcc12e417fda9867485aa27e2fb780a88eca18d8fe0565de6"
+    },
+    {
+      "path": "src/research.js",
+      "size": 4439,
+      "sha256": "a8b518aa48e42928cb5f41e90a57c42cf9803fe2aafc2feeac35ba0963085f2a"
+    },
+    {
+      "path": "style.css",
+      "size": 15687,
+      "sha256": "7b30e92ca947128122b38e097d9d4bbd62602ea1e96ed8b6a1b615e2fe0b40db"
+    },
+    {
+      "path": "tests/brain.test.mjs",
+      "size": 2491,
+      "sha256": "37e640483cd16ad96bdc7216acb14a22b6b151bc7f4d1d2502e900b4294f3da7"
+    },
+    {
+      "path": "tests/engine.test.mjs",
+      "size": 6145,
+      "sha256": "7795d68957861208d6c5be52155c13499a662781bf496c8ccd5506a08e030ab6"
+    },
+    {
+      "path": "tests/pixel-art.test.mjs",
+      "size": 1249,
+      "sha256": "56dfff384d80d27180a0176e99d6789461803566080c65dd28290db31de80ca8"
+    },
+    {
+      "path": "tests/research.test.mjs",
+      "size": 1730,
+      "sha256": "8fae012857a37648fb79aea8de08dbb4c1a1c06c54307615ad3badd44f0e425f"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="380" viewBox="0 0 1280 380" role="img" aria-label="TrapScholar — build a dungeon, teach heroes to fear it. Pixel-art scene of purple dungeon paths, traps and a glowing relic">
+<defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#1e1432"/><stop offset="0.6" stop-color="#152034"/><stop offset="1" stop-color="#102a31"/></linearGradient><radialGradient id="glow"><stop stop-color="#f7ceff" stop-opacity=".75"/><stop offset="1" stop-color="#e0a4ff" stop-opacity="0"/></radialGradient><pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M0 30V0H30" fill="none" stroke="#ffffff" stroke-opacity=".045"/></pattern></defs>
+<rect width="1280" height="380" rx="20" fill="url(#bg)"/><rect width="1280" height="380" rx="20" fill="url(#grid)"/>
+<text x="68" y="63" font-family="monospace" font-size="16" font-weight="bold" letter-spacing="5" fill="#c99eff">THE ADAPTIVE PIXEL DUNGEON</text>
+<text x="68" y="156" font-family="Arial,sans-serif" font-size="77" font-weight="900" letter-spacing="-3" fill="#f3eafe">TRAP<tspan fill="#c38af7">SCHOLAR</tspan></text>
+<text x="69" y="203" font-family="Arial,sans-serif" font-size="25" fill="#c0c9de">Build a dungeon. <tspan fill="#e1b7ff">Teach heroes to fear it.</tspan></text>
+<rect x="68" y="241" width="196" height="39" rx="9" fill="#5b487c"/><text x="166" y="266" text-anchor="middle" font-family="monospace" font-size="15" fill="#f1dffb">PLAY OFFLINE</text>
+<rect x="281" y="241" width="212" height="39" rx="9" fill="#1d4650"/><text x="387" y="266" text-anchor="middle" font-family="monospace" font-size="15" fill="#bef8e5">WATCH AI LEARN</text>
+<text x="69" y="340" font-family="monospace" font-size="14" fill="#8a98b0">NO MODELS  ·  NO ACCOUNTS  ·  REPRODUCIBLE RESEARCH MODE</text>
+<g transform="translate(758 38)"><rect x="0" y="0" width="464" height="304" rx="12" fill="#12192b" stroke="#414460" stroke-width="3"/>
+<g fill="#283248"><rect x="20" y="22" width="424" height="48" rx="5"/><rect x="20" y="126" width="424" height="48" rx="5"/><rect x="20" y="229" width="424" height="48" rx="5"/></g>
+<g fill="#b08cdd" opacity=".9"><rect x="24" y="60" width="418" height="4"/><rect x="24" y="164" width="418" height="4"/><rect x="24" y="267" width="418" height="4"/></g>
+<g fill="#f8a57d"><path d="M122 56l9-24 9 24Zm40 0l9-24 9 24Zm40 0l9-24 9 24Z"/><path d="M180 159l9-24 9 24Zm40 0l9-24 9 24Z"/></g>
+<g fill="#79d3da"><path d="M242 134l12 12-12 12-12-12Z"/><path d="M254 122v47h-4v-47Z"/></g>
+<g fill="#9cf1b3"><circle cx="312" cy="248" r="12"/><circle cx="318" cy="231" r="6"/><circle cx="308" cy="234" r="5"/></g>
+<g transform="translate(365 138)"><rect x="-18" y="-13" width="36" height="32" fill="#a18de4"/><rect x="-11" y="-28" width="22" height="18" fill="#f6caa2"/><rect x="-14" y="-35" width="28" height="10" fill="#cfb9fb"/><rect x="-7" y="-22" width="4" height="4" fill="#292238"/><rect x="5" y="-22" width="4" height="4" fill="#292238"/><rect x="-15" y="18" width="12" height="8" fill="#3b2f57"/><rect x="4" y="18" width="12" height="8" fill="#3b2f57"/><rect x="20" y="-10" width="6" height="30" fill="#efe5bf"/></g>
+<circle cx="410" cy="144" r="56" fill="url(#glow)"/><path d="M400 144h20M410 134v20" stroke="#f3d9fc" stroke-width="9" stroke-linecap="square"/>
+<g font-family="monospace" fill="#cbabe7" font-size="15" font-weight="bold"><text x="28" y="50">NORTH</text><text x="28" y="153">CENTER</text><text x="28" y="255">SOUTH</text></g>
+</g></svg>

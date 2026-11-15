@@ -1,0 +1,10 @@
+# Keep benchmark data and generated vector figures byte-stable across operating systems.
+* text=auto
+*.js text eol=lf
+*.mjs text eol=lf
+*.json text eol=lf
+*.csv text eol=lf
+*.svg text eol=lf
+*.md text eol=lf
+*.html text eol=lf
+*.css text eol=lf

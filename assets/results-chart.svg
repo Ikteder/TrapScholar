@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="470" viewBox="0 0 1240 470" role="img" aria-label="Real reproducible seeded experiment results: adaptive heroes take less damage and choose the safer south corridor more often than uniform heroes on this synthetic fixed map">
+<defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#191f34"/><stop offset="1" stop-color="#111b2c"/></linearGradient><linearGradient id="mag" x2="1"><stop stop-color="#8957d8"/><stop offset="1" stop-color="#cc9af7"/></linearGradient></defs>
+<rect width="1240" height="470" fill="url(#bg)" rx="20"/><rect x="20" y="20" width="1200" height="430" rx="14" fill="none" stroke="#384460"/>
+<text x="53" y="57" fill="#ab91ea" font-family="monospace" font-size="15" font-weight="bold" letter-spacing="3">REAL SEEDED SIMULATION • 40 SEED PAIRS • 12 WAVES</text>
+<text x="53" y="98" fill="#ecedf8" font-family="Arial,sans-serif" font-size="26" font-weight="bold">Damage per hero ↓</text>
+<text x="53" y="125" fill="#98a9c7" font-family="Arial,sans-serif" font-size="15">Lower is better for heroes on this fixed map</text>
+<text x="116" y="160" fill="#c2a1f6" font-family="monospace" font-size="16">Adaptive</text><text x="363" y="160" fill="#80ded3" font-family="monospace" font-size="16">Uniform</text>
+<rect x="133" y="331.531746031746" width="92" height="44.468253968253975" rx="8" fill="url(#mag)"/>
+<rect x="369" y="220.5365079365079" width="92" height="155.4634920634921" rx="8" fill="#64d0c3"/>
+<text x="179" y="315.531746031746" fill="#d4b8fb" text-anchor="middle" font-family="monospace" font-size="28" font-weight="bold">1.28</text>
+<text x="415" y="204.5365079365079" fill="#95ebe0" text-anchor="middle" font-family="monospace" font-size="28" font-weight="bold">4.48</text>
+<line x1="63" y1="376" x2="515" y2="376" stroke="#485571"/>
+<text x="179" y="407" fill="#bec7db" text-anchor="middle" font-family="Arial,sans-serif" font-size="14">Online learner</text>
+<text x="415" y="407" fill="#bec7db" text-anchor="middle" font-family="Arial,sans-serif" font-size="14">Uniform baseline</text>
+<line x1="564" y1="104" x2="564" y2="417" stroke="#374660"/>
+<text x="606" y="98" fill="#ecedf8" font-family="Arial,sans-serif" font-size="26" font-weight="bold">Safer south path →</text>
+<text x="606" y="125" fill="#98a9c7" font-family="Arial,sans-serif" font-size="15">Mean policy probability after each experimental wave</text>
+<line x1="636" y1="374" x2="1191" y2="374" stroke="#35445d" stroke-dasharray="3 6"/><text x="616" y="379" text-anchor="end" fill="#8d9eba" font-size="15">0%</text>
+<line x1="636" y1="305.25" x2="1191" y2="305.25" stroke="#35445d" stroke-dasharray="3 6"/><text x="616" y="310.25" text-anchor="end" fill="#8d9eba" font-size="15">25%</text>
+<line x1="636" y1="236.5" x2="1191" y2="236.5" stroke="#35445d" stroke-dasharray="3 6"/><text x="616" y="241.5" text-anchor="end" fill="#8d9eba" font-size="15">50%</text>
+<line x1="636" y1="167.75" x2="1191" y2="167.75" stroke="#35445d" stroke-dasharray="3 6"/><text x="616" y="172.75" text-anchor="end" fill="#8d9eba" font-size="15">75%</text>
+<line x1="636" y1="99" x2="1191" y2="99" stroke="#35445d" stroke-dasharray="3 6"/><text x="616" y="104" text-anchor="end" fill="#8d9eba" font-size="15">100%</text>
+<polyline points="636.00,282.33 686.45,282.33 736.91,282.33 787.36,282.33 837.82,282.33 888.27,282.33 938.73,282.33 989.18,282.33 1039.64,282.33 1090.09,282.33 1140.55,282.33 1191.00,282.33" fill="none" stroke="#63d4c9" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><polyline points="636.00,159.69 686.45,132.96 736.91,123.80 787.36,111.79 837.82,112.96 888.27,115.11 938.73,115.83 989.18,118.66 1039.64,119.90 1090.09,120.81 1140.55,121.07 1191.00,121.57" fill="none" stroke="#c999f8" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="638" y="404" fill="#8d9eba" font-family="monospace" font-size="15">WAVE 1</text>
+<text x="1191" y="404" text-anchor="end" fill="#8d9eba" font-family="monospace" font-size="15">WAVE 12</text>
+<circle cx="812" cy="436" r="5" fill="#c999f8"/><text x="826" y="441" fill="#d5c7e9" font-family="monospace" font-size="14">Adaptive</text>
+<circle cx="953" cy="436" r="5" fill="#63d4c9"/><text x="966" y="441" fill="#d5c7e9" font-family="monospace" font-size="14">Uniform</text>
+</svg>
