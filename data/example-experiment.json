@@ -1,4 +1,15 @@
 {
+  "difference": {
+    "definition": "uniform minus adaptive mean damage per hero",
+    "mean": 3.201785714285714,
+    "sd": 0.4239675214126018,
+    "n": 40,
+    "ci95": [
+      3.070396818168911,
+      3.3331746104025166
+    ],
+    "caveat": "Descriptive seed-level interval; not a common-random-numbers causal estimate."
+  },
   "meta": {
     "seed": 2026,
     "seeds": 40,
