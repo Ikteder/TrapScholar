@@ -1,0 +1,34 @@
+name: Bootstrap TrapScholar source
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'bootstrap/trapscholar-v1.1.tar.xz'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+      - name: Extract the trusted release bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f bootstrap/trapscholar-v1.1.tar.xz
+          mkdir -p /tmp/trapscholar-extract
+          tar -xJf bootstrap/trapscholar-v1.1.tar.xz -C /tmp/trapscholar-extract
+          cp -a /tmp/trapscholar-extract/. .
+      - name: Commit all verified project sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "feat: add playable TrapScholar v1.1 source, sprites, tests and visuals"
+            git push origin HEAD:main
+          fi
