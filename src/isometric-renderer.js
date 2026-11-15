@@ -1,5 +1,7 @@
 import { ISO, COLS, ROWS, ROUTES, isCorridor, isTrapSlot, project } from './isometric.js';
 import { pixelSprite } from './pixel-art.js';
+import { PROP, drawProp } from './art-assets.js';
+import { ambientRim, paintChasm } from './visual-effects.js';
 
 const P={void:'#0a0d1c',shadow:'#13182b',edge:'#22283c',stone:'#58516b',light:'#9d8698',gold:'#e8b36b',purple:'#bf79ff',mint:'#94efc4',ice:'#a1eafa'};
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
@@ -10,10 +12,10 @@ function isPlatform(x,y){
   if(isCorridor(x,y))return true;
   if(!Number.isInteger(x)||x<2||x>19)return false;
   if(y===2||y===10)return x>=3&&x<=18;
-  if(y===4)return (x>=3&&x<=8)||(x>=13&&x<=18);
-  if(y===5)return (x>=3&&x<=9)||(x>=12&&x<=18);
-  if(y===7)return (x>=3&&x<=8)||(x>=12&&x<=18);
-  if(y===8)return (x>=3&&x<=9)||(x>=13&&x<=18);
+  if(y===4)return (x>=3&&x<=7)||(x>=14&&x<=18);
+  if(y===5)return (x>=3&&x<=8)||(x>=15&&x<=18);
+  if(y===7)return (x>=3&&x<=8)||(x>=15&&x<=18);
+  if(y===8)return (x>=3&&x<=7)||(x>=15&&x<=18);
   return false;
 }
 const hash=(a,b)=>{let v=Math.imul(a+73,13325331)^Math.imul(b+173,832141);v^=v>>>13;return (v>>>0)/4294967296;};
@@ -58,11 +60,11 @@ function background(g,time,reduced){
     rect(g,x+10,y+22,17,2,'#ed9a65');rect(g,x-25,y+34,10,2,'#f2ad6c');
   }
 }
-function floorTile(g,x,y,time){
+function floorTile(g,x,y,time,phase){
   const {halfW:w,halfH:h,depth:d}=ISO;const c=project(x,y);const p=c.x,q=c.y;
   // Tile supports are below the floor; the visible southeast/southwest cliffs produce depth.
-  if(!isPlatform(x+1,y))poly(g,[[p+w,q],[p,q+h],[p,q+h+d],[p+w,q+d]],'#352d42','#463954');
-  if(!isPlatform(x,y+1))poly(g,[[p-w,q],[p,q+h],[p,q+h+d],[p-w,q+d]],'#403349','#554257');
+  if(!isPlatform(x+1,y)){poly(g,[[p+w,q],[p,q+h],[p,q+h+d],[p+w,q+d]],'#2a2a41','#52435f');poly(g,[[p+w-3,q+3],[p+3,q+h+1],[p+3,q+h+6],[p+w-3,q+6]],'#796078');if(hash(x,y)>.48)rect(g,p+w/2,q+h+d/2,2,10,'#463a58');}
+  if(!isPlatform(x,y+1)){poly(g,[[p-w,q],[p,q+h],[p,q+h+d],[p-w,q+d]],'#3a304a','#68506a');poly(g,[[p-w+3,q+3],[p-3,q+h+1],[p-3,q+h+6],[p-w+3,q+6]],'#88717b');if(hash(y,x)>.55)rect(g,p-w/2,q+h+d/2,2,7,'#513e55');}
   if(!isPlatform(x+1,y)||!isPlatform(x,y+1)){
     rect(g,p-1,q+h+d-2,3,2,'#a27b68');
     if(hash(x,y)>.65)rect(g,p-4,q+h+8,3,6,'#6f5868');
@@ -74,8 +76,13 @@ function floorTile(g,x,y,time){
   if(mix<.18){rect(g,p-9,q-1,4,1,'#768d78');rect(g,p-6,q-2,4,1,'#70896d');}
   if(!main){if(mix>.35){rect(g,p-12,q-4,5,2,'#312b40');rect(g,p-2,q+3,3,1,'#b3938f');}if(mix<.24){rect(g,p+8,q-3,4,2,'#3a5b59');rect(g,p+6,q-5,2,3,'#678775');}}
   if(isTrapSlot(x,y)){
-    diamond(g,p,q,12,5,'#28253a','#9c7d93');
-    rect(g,p-2,q-1,4,2,'#b998b9');
+    if(phase==='build'){
+      diamond(g,p,q,12,5,'#4b405c','#987caa');
+      diamond(g,p,q-1,7,3,'#37283e','#c49bdf');
+      rect(g,p-1,q-3,2,3,'#d5b4f5');
+    }else{
+      rect(g,p-2,q,4,2,'#53455d');rect(g,p-1,q,2,1,'#c2a0a5');
+    }
   }
   if(ROUTES.includes(y)&&x>=2&&x<=19){rect(g,p-2,q+h-2,4,1,['#bd9ae5','#68c8c3','#ecb47f'][ROUTES.indexOf(y)]);}
 }
@@ -231,6 +238,15 @@ function environment(g,t,reduced){
   for(const [x,y] of [[4,4],[18,8]])rubble(g,x,y);
   for(const [x,y] of [[11,5],[9,8]])gargoyle(g,x,y);
   stoneStairs(g,20,5);
+  // Non-interactive shoulder masonry carries the sprite-atlas props.
+  for(const [x,y,id,size] of [
+    [4,4,PROP.chest,29],[7,4,PROP.mossRock,30],
+    [15,4,PROP.crystal,31],[18,4,PROP.barrel,27],
+    [5,8,PROP.skull,25],[7,8,PROP.mushrooms,25],
+    [15,8,PROP.obelisk,35],[18,8,PROP.ruins,30],
+    [4,2,PROP.vines,26],[16,10,PROP.coins,24],
+    [10,2,PROP.book,27],[12,10,PROP.crystal,29]
+  ]){const p=project(x,y);drawProp(g,id,p.x,p.y+2,size);}
   // A few azure runes and mossy bricks make the platforms feel lived in.
   for(const [x,y] of [[13,7],[7,2],[15,10]]){
     const p=project(x,y);star(g,p.x,p.y-4,4,'#a6eaff');
@@ -240,13 +256,15 @@ function environment(g,t,reduced){
 export function renderIsometric(g,{traps={},hero:active=null,hovered=null,selected='spikes',phase='build',time=0,reduced=false,power=false,forecast=null,particles=[],floaters=[],paused=false,showRisk=false}){
   g.save();g.imageSmoothingEnabled=false;
   background(g,time,reduced);
+  paintChasm(g,time,reduced);
+  {const sh=g.createRadialGradient(515,326,20,515,326,370);sh.addColorStop(0,'#07091490');sh.addColorStop(1,'#07091400');g.fillStyle=sh;g.fillRect(135,100,780,440);}
   // Mountains and distant pillars; gameplay tiles are all lifted above a lava chasm.
   for(const [x,y,h] of [[2,1,46],[13,0,56],[0,11,64],[22,11,52]]){
     const p=project(x,y);rect(g,p.x-17,p.y-h,32,h,'#282337');rect(g,p.x-21,p.y-h,40,6,'#69546b');
   }
   const positions=[];for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++)if(isPlatform(x,y))positions.push({x,y});
   positions.sort((a,b)=>(a.x+a.y)-(b.x+b.y)||a.y-b.y);
-  for(const {x,y} of positions)floorTile(g,x,y,time);
+  for(const {x,y} of positions)floorTile(g,x,y,time,phase);
   // Optional interpretation layer. Uses OBSERVED model risk, not actual hidden trap map.
   // It is intentionally drawn below structures, traps and heroes to avoid obscuring play.
   if(showRisk && Array.isArray(forecast) && forecast.some(l=>l.visits>0)){
@@ -281,6 +299,7 @@ export function renderIsometric(g,{traps={},hero:active=null,hovered=null,select
   for(const p of particles){g.globalAlpha=clamp(p.life/p.max,0,1);rect(g,p.x,p.y,p.size,p.size,p.color);}g.globalAlpha=1;
   for(const f of floaters){g.globalAlpha=clamp(f.life,0,1);g.font='bold 14px monospace';g.textAlign='center';g.fillStyle=f.color;g.fillText(f.label,f.x,f.y);}g.globalAlpha=1;
   routeSigns(g,forecast);
+  ambientRim(g,time,reduced);
   // Small HUD helps teach players to interact with the 2.5D diamond tiles.
   rect(g,18,18,258,52,'#0d1324d9');rect(g,18,18,258,2,'#b18ce3');
   g.fillStyle='#ead7ff';g.textAlign='left';g.font='bold 15px monospace';g.fillText('SHADOW VAULT  //  ISO',29,40);

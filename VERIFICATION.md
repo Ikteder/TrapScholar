@@ -1,29 +1,21 @@
-# TrapScholar v2.0 verification
+# TrapScholar v3.0 verification
 
-Verified in the authoring container:
+## Authoring environment
 
-- `npm run check`: 32 / 32 tests pass; all referenced production modules syntax checked.
-- `npm run benchmark`: reproducible seeded experiments successfully generated JSON and CSV.
-- `node scripts/plot.mjs`: chart generated from the JSON data fixture.
-- `python scripts/browser_smoke.py`: passed with offline Chromium module execution, placed trap on isometric tile, launched a raid, verified pause/resume, produced research CSV, confirmed no horizontal scroll at 390px width, and observed zero browser JavaScript errors.
-- Actual screenshots taken from that smoke test: `assets/isometric-build.webp` and `assets/isometric-raid.webp` (WebP compressed PNG source captures).
+- Base v2.1 had 39 passing tests. Two atlas tests and one atmosphere test were added, bringing the **published suite to 42 tests**.
+- The v3 development source passed 42/42 Node tests and a Chromium offline smoke test: build a trap, spend resources, start a raid, pause/resume, export research CSV, fit a 390px mobile viewport, with zero page script exceptions.
+- Combat rules, AI adaptation, save compatibility and research formulas were not changed. The v3 additions are primarily rendering, documentation and optional asset workflow.
 
-## Not verified here
+## Limitations
 
-- Windows-native PowerShell command execution on a Windows OS.
-- Long-session performance on low-power mobile hardware.
-- Deployment and browser compatibility on every supported operating system.
-- Exact visual parity with the illustrated promotional key art; the playable game has a deliberately lighter procedural-art style.
+- The two Hugging Face datasets were **not downloaded** in the authoring environment. The importer is an optional, unverified network-dependent tool; it requires human review of selected sprite images and their rights.
+- NVIDIA OpenUSD assets and Blender render-to-sprite automation have **not** been integrated.
+- Windows native browser gameplay, long-session performance, the new GitHub commit's CI, and exact visual parity with promotional art are not verified by this record.
+- Screenshots already on GitHub capture the v2.1 baseline. See the local v3 source archive for the new gameplay capture; don't label old captures as v3.
 
-## Model / runtime
+## Test
 
-No generative model, GPU-specific runtime or network service is needed to play. The research mode uses online statistical learning, not LLM inference.
-
-## v2.1 verification notes
-
-- Regression check: `npm run check` validates syntax and runs the test suite.
-- Metric tests validate pre-combat missing values, entropy endpoints, exact damage accounting, and route concentration response.
-- Research tests validate the descriptive policy difference and explicit unavailability of an interval for one seed.
-- README images are displayed one per section at explicit widths, with separate text captions. Avoid side-by-side image tables or markdown image/text combinations.
-- The risk overlay displays the learner's estimated damage values and is not ground-truth trap detection.
-- Browser and Windows-native testing should be recorded with an environment and date; do not mark those complete solely on the basis of Node tests.
+```powershell
+npm run check
+.\scripts\start.ps1
+```

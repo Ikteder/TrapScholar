@@ -23,3 +23,10 @@
 - Added seed-level descriptive damage-difference interval and clarified limits of cross-policy RNG pairing.
 - Improved mobile metric-card layout and switched the game-header preview to a real gameplay capture.
 - Preserved deterministic combat behavior and the v2 save format.
+## 3.0.0 — atmospheric visuals and asset research pipeline
+
+- Added original local 16-prop sprite atlas and source-aware optional import pipeline.
+- Added deterministic atmospheric light pools, embers/dust, deeper chasm and masonry shading.
+- Made the three lane structure clearer and suppressed build sockets during raids.
+- Documented Angais Pixel Art Atlas, NVIDIA SimReady, CC0 fantasy kit alternatives and license caveats.
+- Expanded regression suite to 42 tests. Campaign/learning rules and save format unchanged.

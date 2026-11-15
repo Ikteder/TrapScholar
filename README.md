@@ -7,7 +7,7 @@
 An offline, isometric pixel-art strategy game with transparent adaptive enemies and a reproducible AI sandbox.
 
 [![CI](https://github.com/Ikteder/TrapScholar/actions/workflows/tests.yml/badge.svg)](https://github.com/Ikteder/TrapScholar/actions/workflows/tests.yml)
-![Version](https://img.shields.io/badge/version-2.1.0-9d82dc)
+![Version](https://img.shields.io/badge/version-3.0.0-9d82dc)
 ![Offline](https://img.shields.io/badge/gameplay-100%25_offline-77cba6)
 ![License](https://img.shields.io/badge/license-MIT-e8bd82)
 ![AI](https://img.shields.io/badge/AI-online_learning-not_an_LLM-789dd7)
@@ -22,7 +22,7 @@ An offline, isometric pixel-art strategy game with transparent adaptive enemies 
 
 <p align="center"><sub>Actual game rendering in Chromium. No generated concept art is represented as gameplay.</sub></p>
 
-> **Release v2.1:** Cleaner visual presentation, live combat telemetry, optional on-map risk overlay, and a more informative research comparison. The v2 save format and deterministic combat rules remain compatible.
+> **Release v3.0:** The playable dungeon now uses clearer three-lane geometry, atmospheric torch and chasm lighting, and a small original sprite atlas. The AI, campaign and save format remain compatible. Gameplay screenshots below document the preceding v2.1 baseline; run the game to see the current v3 visuals.
 
 ## Why play it?
 
@@ -58,6 +58,24 @@ python3 -m http.server 8080 --bind 127.0.0.1
 Open **http://127.0.0.1:8080**. The project uses browser-native JavaScript modules. A local static server is required; there is **no npm install to play**. Node.js 20+ is only needed for development tests and benchmark regeneration.
 
 **Controls:** Select a trap with `1`–`4`, remove with `5`, click a glowing isometric socket to build, press `Space` to start a raid, `P` to pause, and `M` to toggle optional sound. Use **RISK OVERLAY** to reveal the AI's estimated route danger on the floor. Keyboard-only build controls, autosave, save import/export, speed controls, and reduced-motion support are also provided.
+
+## V3: atmospheric graphics and source-aware assets
+
+V3 adds a **working** asset-backed isometric environment: a 16-sprite original SVG atlas, moss and dungeon objects on non-interactive masonry, brighter torches, subtle dust, deeper masonry shadows and a less cluttered raid view. The game needs no internet connection. This is still 2.5D Canvas, not real-time 3D.
+
+<p align="center"><img src="assets/world/prop-atlas.svg" width="256" alt="Original TrapScholar v3 pixel prop atlas: crystals, torches, treasure, barrels, books and masonry" /></p>
+<p align="center"><sub>Original v3 project prop atlas, not an external dataset image.</sub></p>
+
+### The two Hugging Face sources evaluated
+
+| Dataset | Practical role | License and limitation |
+|---|---|---|
+| [Angais Pixel Art Atlas 1.4M](https://huggingface.co/datasets/Angais/pixel-art-atlas-1.4m) | 16×16 objects and icons; *not* coherent isometric world/hero animations | CC0 only to the author's rights; Krea and third-party terms remain |
+| [NVIDIA SimReady](https://huggingface.co/datasets/nvidia/simready-assets) | Selective OpenUSD 3D reference/baking; *not* a lightweight fantasy tileset | Listed CC BY 4.0; 2,677 assets, ~490GB total |
+
+The datasets are **not bundled**. An optional Pixel Art Atlas preview/import script is provided for manual quality and rights review. For coherent dungeons, prefer [Kenney Isometric Dungeon Tiles (CC0)](https://kenney-assets.itch.io/isometric-dungeon-tiles) or [KayKit Dungeon Pack (CC0)](https://kaylousberg.itch.io/kaykit-dungeon-pack), with an offline fixed-camera render-to-sprite pipeline.
+
+See [ASSET_PIPELINE](docs/ASSET_PIPELINE.md) and [THIRD_PARTY_ASSETS](THIRD_PARTY_ASSETS.md). Do not imply the illustrated fantasy cover is gameplay.
 
 ## The playable game
 
