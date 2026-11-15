@@ -14,3 +14,12 @@
 
 ## 1.0.0 — Campaign and lab
 - Added waves, upgrades, classes, persistent saves, deterministic experiments and research charts.
+
+## v2.1.0 — Clarity and telemetry
+
+- Reorganized README into a single-column, captioned, responsive image layout; moved promotional cover under an optional expandable section.
+- Added combat metrics derived from observed outcomes: defense rate, damage/hero and normalized Shannon route focus.
+- Added optional colored AI-estimated route-risk overlay on isometric corridors.
+- Added seed-level descriptive damage-difference interval and clarified limits of cross-policy RNG pairing.
+- Improved mobile metric-card layout and switched the game-header preview to a real gameplay capture.
+- Preserved deterministic combat behavior and the v2 save format.

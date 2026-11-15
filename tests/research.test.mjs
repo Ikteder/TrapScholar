@@ -36,3 +36,15 @@ test('12-wave research arena includes exactly 42 uncensored hero attempts',()=>{
     if(policy==='uniform')assert.deepEqual(r.finalProbabilities,[1/3,1/3,1/3]);
   }
 });
+
+test('difference summary equals observed policy means',()=>{
+  const e=compare({seed:81,seeds:8,rounds:10});
+  assert.equal(e.difference.n,8);
+  assert.ok(Math.abs(e.difference.mean-(e.groups.uniform.meanDamage-e.groups.adaptive.meanDamage))<1e-9);
+  assert.ok(e.difference.ci95[0]<=e.difference.mean&&e.difference.mean<=e.difference.ci95[1]);
+});
+test('one-seed comparison explicitly omits unavailable interval',()=>{
+  const e=compare({seed:81,seeds:1,rounds:4});
+  assert.equal(e.difference.ci95,null);
+  assert.equal(e.difference.sd,null);
+});

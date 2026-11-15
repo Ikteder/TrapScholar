@@ -237,7 +237,7 @@ function environment(g,t,reduced){
     rect(g,p.x-12,p.y+2,6,2,'#507b70');
   }
 }
-export function renderIsometric(g,{traps={},hero:active=null,hovered=null,selected='spikes',phase='build',time=0,reduced=false,power=false,forecast=null,particles=[],floaters=[],paused=false}){
+export function renderIsometric(g,{traps={},hero:active=null,hovered=null,selected='spikes',phase='build',time=0,reduced=false,power=false,forecast=null,particles=[],floaters=[],paused=false,showRisk=false}){
   g.save();g.imageSmoothingEnabled=false;
   background(g,time,reduced);
   // Mountains and distant pillars; gameplay tiles are all lifted above a lava chasm.
@@ -247,6 +247,20 @@ export function renderIsometric(g,{traps={},hero:active=null,hovered=null,select
   const positions=[];for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++)if(isPlatform(x,y))positions.push({x,y});
   positions.sort((a,b)=>(a.x+a.y)-(b.x+b.y)||a.y-b.y);
   for(const {x,y} of positions)floorTile(g,x,y,time);
+  // Optional interpretation layer. Uses OBSERVED model risk, not actual hidden trap map.
+  // It is intentionally drawn below structures, traps and heroes to avoid obscuring play.
+  if(showRisk && Array.isArray(forecast) && forecast.some(l=>l.visits>0)){
+    const max=Math.max(...forecast.map(l=>l.estimatedDamage),0.001);
+    for(let lane=0;lane<ROUTES.length;lane++){
+      const risk=forecast[lane].estimatedDamage/max;
+      const ink=risk>.66?'#ff817d':risk>.33?'#edc38c':'#83e8ce';
+      for(let x=3;x<=19;x++){
+        const p=project(x,ROUTES[lane]);
+        diamond(g,p.x,p.y,ISO.halfW-7,ISO.halfH-5,'#00000000',ink);
+        rect(g,p.x-2,p.y+2,4,2,ink);
+      }
+    }
+  }
   // Vertical architecture, localized to the route entrance and relic.
   entryGate(g,time,reduced);
   environment(g,time,reduced);

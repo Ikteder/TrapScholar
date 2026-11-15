@@ -4,6 +4,7 @@ import { GAME_VERSION, TRAPS, HEROES, UPGRADES, MAX_WARD, canBuild, createRun, b
 import { compare, resultsCSV, SCENARIO } from './research.js';
 import { renderIsometric } from './isometric-renderer.js';
 import { pointerToCell, project } from './isometric.js';
+import { campaignMetrics } from './metrics.js';
 
 const $=id=>document.getElementById(id);
 const canvas=$('world'),ctx=canvas.getContext('2d',{alpha:false});
@@ -13,7 +14,7 @@ const COLORS=['#c596f5','#6de0cd','#f5b675'];
 const PREF_REDUCED=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches??false;
 const app={state:createRun(),selected:'spikes',phase:'build',active:null,queue:0,summary:null,delay:0,
   paused:false,speed:1,events:[],hovered:null,time:0,particles:[],floaters:[],shake:0,
-  research:null,audio:false,audioContext:null};
+  research:null,audio:false,audioContext:null,showRisk:false};
 
 function log(message,tone='normal'){
   app.events.unshift({message:String(message).slice(0,260),tone,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
@@ -88,6 +89,11 @@ function renderUI(){
     el.title=owned?'Upgrade owned':UPGRADES[kind].desc;
   }
   $('kbd-place').disabled=app.phase!=='build';
+  const measures = campaignMetrics(s);
+  $('metric-defense').textContent = measures.defenseRate === null ? '—' : `${Math.round(100 * measures.defenseRate)}%`;
+  $('metric-defense-desc').textContent = measures.resolved ? `${measures.stopped} / ${measures.resolved} stopped` : 'Waiting for battles';
+  $('metric-damage').textContent = measures.damagePerHero === null ? '—' : measures.damagePerHero.toFixed(1);
+  $('metric-focus').textContent = `${Math.round(100 * measures.routeConcentration)}%`;
   const f=forecasts(s.brain);$('lane-bars').replaceChildren();
   for(const item of f){
     const group=document.createElement('div');
@@ -232,7 +238,7 @@ function drawWorld(){
   renderIsometric(ctx,{traps:app.state.traps,hero:app.active,hovered:app.hovered,
     selected:app.selected,phase:app.phase,time:app.time,reduced:PREF_REDUCED,
     power:app.state.upgrades.power,forecast:forecasts(app.state.brain),
-    particles:app.particles,floaters:app.floaters,paused:app.paused});
+    particles:app.particles,floaters:app.floaters,paused:app.paused,showRisk:app.showRisk});
 }
 function chartLine(ctx,series,points,colors,maxY=1){
   const left=42,top=14,right=points.width-16,bottom=points.height-28;
@@ -345,6 +351,12 @@ function research(){
       const paragraph=document.createElement('p');paragraph.className='chart-note';paragraph.style.marginTop='12px';
       paragraph.textContent=`${seeds} seed pairs × 2 policies · ${rounds} waves each · fixed scenario: ${SCENARIO.title}. Arena restores wards before each trial to prevent early termination; combat and route decisions use the shared engine.`;
       output.append(paragraph);
+      const diff=result.difference;
+      const effect=document.createElement('p');effect.className='difference-note';
+      effect.textContent=`Mean damage difference (uniform − adaptive): ${diff.mean.toFixed(2)} per hero`+
+        (diff.ci95 ? ` · approximate 95% interval [${diff.ci95[0].toFixed(2)}, ${diff.ci95[1].toFixed(2)}]` : ' · interval unavailable for one seed')+
+        '. Positive means the adaptive heroes took less damage. Seed streams diverge between policies, so this is descriptive, not a causal estimate.';
+      output.append(effect);
       const details=document.createElement('details');details.className='lab-details';
       const summary=document.createElement('summary');summary.textContent='View reproducibility details and individual seeded runs';
       const tbl=document.createElement('table');tbl.className='lab-table';
@@ -383,6 +395,11 @@ $('start-btn').addEventListener('click',startRaid);
 $('pause-btn').addEventListener('click',()=>{if(app.phase!=='raid')return;app.paused=!app.paused;renderUI();});
 $('speed-btn').addEventListener('click',()=>{app.speed=app.speed===1?2:app.speed===2?4:1;$('speed-btn').textContent=`SPEED ${app.speed}×`;});
 $('audio-btn').addEventListener('click',toggleSound);
+$('risk-btn').addEventListener('click',()=>{
+  app.showRisk=!app.showRisk;
+  $('risk-btn').textContent=app.showRisk?'◆ RISK OVERLAY ON':'◇ RISK OVERLAY OFF';
+  $('risk-btn').setAttribute('aria-pressed',String(app.showRisk));
+});
 $('reset-btn').addEventListener('click',()=>{
   if(!confirm('Reset your entire saved run? This cannot be undone. Export first if you want to keep it.'))return;
   app.state=createRun();app.phase='build';app.active=null;app.queue=0;app.summary=null;app.events=[];

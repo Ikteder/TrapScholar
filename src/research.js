@@ -68,7 +68,22 @@ export function compare({seed=2026,seeds=12,rounds=12}={}){
       meanCentralShare:avg(r=>r.visits[1]/r.attempts),
       meanSouthShare:avg(r=>r.visits[2]/r.attempts)};
   }
-  return {meta:{seed,seeds,rounds,scenario:SCENARIO.title,engine:'shared-v2',synthetic:true,
+  // Descriptive seed-level differences. Seed matching does not create fully
+  // paired random streams, because adaptive and uniform consume RNG differently.
+  const differences=[];
+  for(let i=0;i<runs.length;i+=2)differences.push(runs[i+1].meanDamage-runs[i].meanDamage);
+  const n=differences.length,mean=differences.reduce((a,b)=>a+b,0)/n;
+  const sd=n>1?Math.sqrt(differences.reduce((a,b)=>a+(b-mean)**2,0)/(n-1)):null;
+  // Approximate Student-t critical values, 95% two-sided, for df 1..29.
+  const critical=[12.706,4.303,3.182,2.776,2.571,2.447,2.365,2.306,2.262,2.228,
+    2.201,2.179,2.160,2.145,2.131,2.120,2.110,2.101,2.093,2.086,2.080,
+    2.074,2.069,2.064,2.060,2.056,2.052,2.048,2.045];
+  const t=n<2?null:n<=30?critical[n-2]:1.96;
+  const margin=sd===null?null:t*sd/Math.sqrt(n);
+  const difference={definition:'uniform minus adaptive mean damage per hero',
+    mean,sd,n,ci95:margin===null?null:[mean-margin,mean+margin],
+    caveat:'Descriptive seed-level interval; not a common-random-numbers causal estimate.'};
+  return {difference,meta:{seed,seeds,rounds,scenario:SCENARIO.title,engine:'shared-v2',synthetic:true,
     arena:'Fixed layout and equal hero counts; ward restored before each experimental hero (not campaign gameplay)',
     note:'Deterministic for fixed seeds. This is a simple illustrative heuristic comparison, not a published benchmark.'},groups,runs};
 }

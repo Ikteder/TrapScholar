@@ -45,3 +45,11 @@ Node >=20 and Python >=3 are enough. If the repository has been cloned previousl
 ## Next review checkpoint
 
 Deliver a screenshot and a short test report after improving one hero spritesheet and one complete tile family; compare the screenshot against `assets/isometric-raid.webp`. Do not claim an image-generation output is playable until it is connected to controls and interactions.
+
+## v2.1 continuation state
+
+- New `src/metrics.js` provides pure read-only campaign telemetry; do not change saved-state schema for it.
+- `RISK OVERLAY` is optional and visualizes risk estimates from the online learner.
+- Research comparison now includes `difference` with a descriptive seed-level interval. It is **not** a paired causal estimate because random streams diverge across policies.
+- Keep README image sections one-column; always label concept artwork separately from real game captures.
+- Do not claim web/Windows/GitHub verification before actually testing those environments.

@@ -1,6 +1,6 @@
 {
   "name": "trapscholar",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "type": "module",
   "description": "Fully offline isometric adaptive pixel dungeon game with transparent AI and seeded research mode",
