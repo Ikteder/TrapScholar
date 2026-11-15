@@ -1,312 +1,183 @@
 <div align="center">
 
-<img src="assets/logo.webp" alt="TrapScholar original pixel-art logo featuring an arcane archway, a magical book and dungeon traps" width="700" />
+<img src="assets/logo.webp" alt="TrapScholar logo with an arcane book, glowing crystal and dungeon traps" width="690" />
 
-<img src="assets/key-art.webp" alt="Original illustrated TrapScholar key art: four heroes investigate a multi-route dungeon guarded by spikes, frost, arcane turrets and runes" width="1200" />
+### Build a dungeon. Teach the heroes to fear it.
 
-<sub><b>Original promotional key art</b> — the interactive game uses its own crisp pixel-art renderer, shown in real screenshots below.</sub>
+**An offline, open-source isometric pixel strategy game with enemies that visibly learn from your defenses.**
 
-## TrapScholar
+![Version](https://img.shields.io/badge/version-2.0.0-bc8bf1?style=flat-square) ![MIT](https://img.shields.io/badge/license-MIT-eeb978?style=flat-square) ![Offline](https://img.shields.io/badge/network-offline-72d8b7?style=flat-square) ![Models](https://img.shields.io/badge/LLM-not_required-7da8de?style=flat-square) ![Tests](https://img.shields.io/badge/automated_tests-32_passing-9fe4bf?style=flat-square)
 
-### Build a dungeon. Teach heroes to fear it.
+[Play on Windows](#quick-start) · [Gameplay](#real-gameplay) · [Adaptive AI](#how-the-heroes-learn) · [Research mode](#research-mode) · [Development](#developer-notes)
 
-**A playable, offline pixel-art dungeon defense game where the *enemies learn from you*.**
+<img src="assets/key-art.webp" width="1100" alt="Promotional illustration of the TrapScholar fantasy dungeon, traps and incoming heroes" />
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-bb91eb?style=for-the-badge)](LICENSE)
-![Runtime](https://img.shields.io/badge/runtime-zero_dependencies-69d9bd?style=for-the-badge)
-![Models](https://img.shields.io/badge/LLM_not_required-offline-7ca8e8?style=for-the-badge)
-![Version](https://img.shields.io/badge/version-1.1.0-f2b58a?style=for-the-badge)
-
-**[Play locally](#quick-start)** · **[Gameplay](#gameplay)** · **[See how the AI learns](#the-visible-ai)** · **[Reproduce the experiment](#reproducible-experiment)** · **[Architecture](#architecture)**
+<sub>Illustrated promotional key art. The images below show **real rendered gameplay**, not AI concept images.</sub>
 
 </div>
 
 ---
 
-## What is TrapScholar?
+## TrapScholar v2: Isometric Pixel Edition
 
-Most tower-defense games give enemies a fixed route. **In TrapScholar, heroes remember what hurt them**. Put a deadly gauntlet in the north corridor and the hero faction gradually favors the south. Move your traps and their estimates can become outdated. The result is an ongoing strategic duel between your defenses and an observable, simple online learner.
+You're the dungeon keeper defending a glowing relic. Place spikes, frost crystals, arcane turrets and venom traps across **three routes**. Raiders, scouts, guardians and arcanists learn which paths hurt them and gradually favor safer paths — so you must adapt your defenses in response.
 
-You're the dungeon keeper. Protect your relic through **15 waves** of raiders, scouts, guardians, and arcanists. Every placement, kill, breach, and observation matters. Survive to claim victory, then optionally continue in endless mode.
+**Version 2 adds a playable 2.5D isometric dungeon** while retaining the same deterministic combat and AI learning rules from v1.1. The renderer is original Canvas 2D code, not a heavyweight 3D engine, and it requires **zero runtime dependencies or GPU-specific downloads**. You can play completely offline after downloading the repository.
 
-This is a **complete playable small game**, not a slideshow, and **not a claim of state-of-the-art ML performance**. Gameplay sprites are drawn from cached hand-authored procedural pixel art, all gameplay and experiments run offline, and no neural networks, keys, models, APIs, tracking, or runtime package installs are needed.
+## Real gameplay
 
-<div align="center">
+| Isometric dungeon | Trap placement and active raid |
+|:--:|:--:|
+| ![Actual isometric gameplay showing elevated stone paths and a glowing relic](assets/isometric-build.webp) | ![Actual playable isometric dungeon after a spike trap was placed, with enemies invading](assets/isometric-raid.webp) |
 
-| **Dungeon building** | **Heroes in motion** |
-|:---:|:---:|
-| ![Live build mode showing the new v1.1 pixel tiles, torch sprites, floor markings, gate and glowing relic](assets/gameplay-pixel-v1.1.png) | ![Live v1.1 raid showing an armored hero in motion and a newly placed spike trap](assets/raid-pixel-v1.1.png) |
+*Captured from the actual game in headless Chromium using the local source modules. The surrounding image at the top is promotional artwork; the screenshots in this section show what is currently playable.*
 
-*Actual Chromium interactions rendered by the v1.1 browser game code, not concept art or mock-ups. The cover above is separately labeled promotional artwork.*
+**The visual conversion includes:**
+- Projected diamond-shaped stone tiles, bridges, raised cliffs and lava chasms with hand-authored textures.
+- A gothic entrance, glowing relic shrine, torchlight, banners, gargoyles, magic circles, stained-stone ruins and floor details.
+- Four rendered isometric trap designs and animated hero class sprites, with health bars and hit effects.
+- Real build interactions on rune sockets — no static background masquerading as a game.
+- Pixel-accurate click-to-grid projection, high-DPI-friendly canvas scaling, mobile layout, and reduced-motion support.
 
-</div>
-
-### New in v1.1 — pixel-art overhaul
-
-The gameplay canvas now renders **authored 32×32 pixel sprites**, rather than the original minimal rectangles. The new art includes beveled stone floor tiles, gothic masonry with moss and cracks, illuminated gates, a glowing relic, colorful trap sprites, animated character class silhouettes, banners and torchlight. The sprite cache is painted locally using Canvas 2D — **zero image downloads required for gameplay**. Reduced-motion preferences are respected.
-
-The page and README also use newly created **promotional pixel key art and an illustrated logo**. Those are *artwork*, not screenshots and not evidence of an isometric game engine. The game itself remains top-down, and the benchmark/chart values have not been changed by the graphics work.
-
-#### What it looks like on a desktop
-
-![Actual v1.1 browser dashboard with upgraded tile art](assets/dashboard-pixel-v1.1.webp)
-
-### At a glance
-
-| Playable strategy | Inspectable AI | Research-grade habits | Open-source friendly |
-|---|---|---|---|
-| 4 trap types, 4 hero classes, permanent upgrades, 15-wave victory + endless | Per-route danger estimates, exploration bonus, live route-probability bars | Seeded RNG, explicit simulator assumptions, CSV/JSON data, unit + browser-interaction checks | No build step, no cloud, no third-party art, GitHub Pages compatible |
+**Scope note:** This is a functioning **2.5D/isometric** game, not a fully navigable 3D voxel world. The sophisticated illustrated cover is a design target, not a claim that runtime visuals have identical detail.
 
 ## Quick start
 
-**Requirements:** any modern Chromium/Firefox/Safari browser and a static file server. Python 3 is convenient but not required. Node.js 20+ is **only for tests and reproducible experiments**.
-
-**Windows 11 / PowerShell:**
+### Windows 10/11 PowerShell
 
 ```powershell
-# Inside the extracted trapscholar project folder
+# Clone the project, or extract the downloadable source ZIP.
+git clone https://github.com/Ikteder/TrapScholar.git
+cd TrapScholar
 .\scripts\start.ps1
 # Open http://127.0.0.1:8080
 ```
 
-**macOS / Linux:**
+If you already cloned v1.1, run `git pull` instead of cloning again.
+
+### macOS / Linux
 
 ```bash
 python3 -m http.server 8080 --bind 127.0.0.1
 # Open http://127.0.0.1:8080
 ```
 
-**Alternative (if Node.js is already available):**
-
-```bash
-npx --yes http-server . -a 127.0.0.1 -p 8080
-```
-
-The Node alternative downloads a package if it isn't cached; the Python route does not. **Opening `index.html` directly with `file://` is not supported**, because browser security policies restrict JavaScript module imports. Host it locally or via GitHub Pages.
+There is no `npm install` required to **play**. The game uses browser-native ES modules, so open it through a local static server rather than double-clicking the HTML file. Node.js 20+ is required only for tests, charts and seeded research fixtures.
 
 ### Controls
 
-| Action | Control |
+| Action | How |
 |---|---|
-| Select spikes, frost, arcane bolt, venom, remove | `1` `2` `3` `4` `5` or click the buttons |
-| Place/replace/remove a trap | Click or tap a corridor tile while building |
-| Keyboard-only trap placement | Expand **Keyboard-only trap placement**, choose lane/tile |
-| Start the next wave | `Space` or **Send the heroes** |
-| Pause / resume | `P` or **Pause** |
-| Change animation speed | **Speed 1× / 2× / 4×** |
-| Toggle synthesized sound | `M` or **Sound** (off by default) |
-| Export / import campaign | **Export save** / **Import save** (JSON) |
-| Reset | **Reset run** (asks for confirmation) |
+| Select spike, frost, arcane, venom, remove | `1`, `2`, `3`, `4`, `5` or tool buttons |
+| Build / replace / sell a trap | Click **glowing diamond sockets** during the build phase; decorative masonry is not interactive |
+| Keyboard-only placement | Expand **Keyboard-only trap placement** and choose lane and tile |
+| Start raid | `Space` or **Send the Heroes** |
+| Pause / resume | `P` or Pause button |
+| Accelerate simulation | Speed button: 1× → 2× → 4× |
+| Enable optional sound | `M` / Sound button (off by default) |
+| Save / restore | Export / import JSON, plus autosave between waves |
+| Restart | Reset button (confirmation required) |
 
-## Gameplay
+## How the heroes learn
 
-<details open>
-<summary><b>Your dungeon arsenal</b></summary>
+Each hero faction maintains a damage-risk estimate for north, central and south. Outcomes update these per-lane estimates; a softmax-based decision policy then selects future routes with an exploration component. The probability bars are the model's **actual current probabilities**, not scripted story events.
 
-| Trap | Cost | Damage / effect | Design intent |
-|---|---:|---|---|
-| ▲ Spikes | 2 souls | 2 immediate damage | Cheap, reliable; scouts counter it |
-| ❄ Frost | 3 souls | 1 hit + 2 lingering damage ticks, slows hero | Slows progress while dealing lingering damage |
-| ✦ Arcane bolt | 4 souls | 3 immediate damage | High burst; arcanists resist it |
-| ☣ Venom coil | 5 souls | 1 hit + 3 lingering damage ticks | Attrition; guardians resist poison ticks |
-
-The hero army also develops **resistance to the trap type responsible for the most accumulated damage**, starting on wave 4 once enough damage has been observed. Diversifying is often stronger than spamming one trap.
-
-</details>
-
-<details>
-<summary><b>Four heroes, three dungeon upgrades</b></summary>
-
-**Invaders:** Raiders (all-rounders), Scouts (reduced spike damage), Guardians (+3 HP and poison resistance), and Arcanists (reduced arcane-bolt damage). Roles enter the roster progressively.
-
-**Keeper upgrades:** Reinforce wards (9 souls, restore +3 wards up to 16), Soulforge (10 souls, earn +1 soul per kill), and Overcharge (12 souls, +1 base spike / bolt damage). Soulforge and Overcharge are permanent for the current run.
-
-You start with **18 souls and 12 wards**. Each completed wave awards +4 souls; defeated heroes award +2 souls, or +3 with Soulforge. At 0 wards, the relic falls. At the end of wave 15, any remaining ward unlocks a victory and an optional endless continuation.
-
-</details>
-
-<details>
-<summary><b>Accessibility, saves, audio and responsive play</b></summary>
-
-The UI has keyboard navigation, a keyboard-only placement form, focus outlines, responsive mobile layout, labels and reduced-motion support. The game uses cached, authored 32×32 pixel sprites painted into a standard 2D canvas, with hit bursts, damage numbers, two walking poses per hero class, status effects and health indicators.
-
-Save snapshots automatically at **stable build and completed-wave states**. Reloading during a raid returns to the previous stable snapshot. The JSON importer validates file size and schema. v0.1 browser saves are migrated in a non-destructive manner. Sound uses native Web Audio oscillators and is **opt-in**, with no audio files to install.
-
-</details>
-
-## The visible AI
-
-There is no black-box LLM deciding routes. The learner is a deliberately modest, inspectable **risk-aware, nonstationary three-armed bandit heuristic**. Each route holds a visit count, estimated harm and observed outcomes.
-
-A hero chooses among three paths using a seeded random sample from softmax probabilities. After the outcome, the learner updates **only the visited route** with its *experienced damage and survival*. It does **not** read trap locations on unvisited corridors.
-
-For lane \(i\), on observing damage \(d\) and whether a hero survived the route, the heuristic applies:
-
-```text
-sample = damage - 0.4 if survived, else damage + 0.6
-riskᵢ ← max(0, sample)                         [first observed visit]
-riskᵢ ← max(0, 0.55 × riskᵢ + 0.45 × sample)   [later visits]
-
-scoreᵢ = riskᵢ − 1.8 √(ln(total_visits + 2) / (visitsᵢ + 1))
-P(lane i) = softmax(−scoreᵢ / 0.9)
+```mermaid
+flowchart LR
+    A[Dungeon keeper positions traps] --> B[Hero selects route]
+    B --> C[Shared combat engine]
+    C --> D[Damage / survival observations]
+    D --> E[Update online risk learner]
+    E --> B
+    C --> F[Visible HUD and live charts]
+    E --> F
+    E --> G[Seeded research comparison]
 ```
 
-The exploration term favors less-visited routes; an exponential moving average lets the model respond to layout changes. It is **not Q-learning, deep reinforcement learning, gradient-based training or a proven optimal bandit algorithm**. Policy logic lives in [`src/brain.js`](src/brain.js), while gameplay rules live in [`src/engine.js`](src/engine.js).
+The adaptive brain is in [`src/brain.js`](src/brain.js). Combat and the campaign are in [`src/engine.js`](src/engine.js). The research mode uses **the same combat rules**, not a separate approximate simulation.
 
-<div align="center">
+### What the characters do
 
-![TrapScholar architecture diagram: one deterministic combat engine for campaign and laboratory](assets/architecture.svg)
+| Type | Behavior |
+|---|---|
+| Raider | Basic invading hero |
+| Scout | Mitigates spikes |
+| Guardian | Extra health and venom resistance |
+| Arcanist | Mitigates arcane bolts |
 
-</div>
+Four traps have distinct damage / status behaviors. Three permanent upgrades can improve defenses; beat **15 waves** to win, or continue in endless mode.
 
-## Reproducible experiment
+## Research mode
 
-> **Real synthetic test, not fabricated model measurements.** The sample below was produced by the actual TrapScholar engine at **seed 2026, 40 seed pairs, 12 waves each**. It measures the game's tiny *adaptive route policy*, **not** an LLM, novel research contribution or a statistical guarantee.
+The built-in laboratory compares **adaptive route selection** against **uniform route selection** under the same preset trap layout, with deterministic seeded runs. The lab replenishes relic wards between attempts to ensure both policies receive the intended number of trials. This differs intentionally from campaign survival, which ends when relic wards run out.
 
-![Reproducible simulated damage and safe-route-probability results](assets/results-chart.svg)
+<img src="assets/results-chart.svg" alt="Reproducible research comparison of adaptive versus uniform hero route selection" width="950" />
 
-### What exactly is being compared?
+*Experimental example generated by the included engine code; this figure is not a promise of universal superiority. Seeds, layouts and caveats are documented in the example data.*
 
-**Scenario:** one fixed trap layout. North has four heavy traps; Central has spikes and frost; South has one light spike trap. A policy may choose routes based on a continuously updated learner (**adaptive**) or select from an equal 1/3 chance for each lane (**uniform baseline**). Both policies use identical combat rules and independent, deterministic pseudo-random streams initialized from the same paired seeds. Since different choices consume RNG differently, these are reproducible paired seeds **not** matched counterfactual trajectories.
-
-**Laboratory difference from the campaign:** The arena **replenishes wards before each hero attempt**, so an early relic defeat cannot truncate learning. Each policy receives an equal number of attempted hero runs (42 per 12-wave trial), and each hero uses the same damage, status effects and memory-update functions as the campaign. Research results are conditional on this **one** scenario, and should not be generalized to other environments without further experiments.
-
-| Actual sample statistic | Adaptive | Uniform |
-|---|---:|---:|
-| Mean damage per hero | **1.28** | 4.48 |
-| Hero survival rate | 97.2% | 84.6% |
-| Share choosing South (safer) | 88.4% | 33.3% |
-| Sample SD of per-seed mean damage | 0.17 | 0.38 |
-
-The adaptive heroes learn to avoid costly lanes and are **more likely** to reach the relic. **That is bad for the dungeon keeper, but good for the learning policy.** The behavior is scenario-dependent. The project makes no claim that the heuristic is superior across games, seeds, or alternative reward formulations.
-
-### Reproduce exactly
-
-```bash
+```powershell
 npm test
-npm run benchmark    # seed 2026 · 40 seed pairs · 12 waves
+npm run check
+npm run benchmark
 node scripts/plot.mjs
 ```
 
-This regenerates [`data/example-experiment.json`](data/example-experiment.json), [`data/example-experiment.csv`](data/example-experiment.csv), and [`assets/results-chart.svg`](assets/results-chart.svg) — all calculated from code, with no external API. Run the **Research mode** section in the browser to change the number of seed pairs and waves, compare results, inspect every run, and export its CSV.
+- [`data/example-experiment.json`](data/example-experiment.json) — complete reproducible JSON record
+- [`data/example-experiment.csv`](data/example-experiment.csv) — exportable table
+- [`assets/results-chart.svg`](assets/results-chart.svg) — generated visualization
 
-The full per-seed observations are deliberately shipped alongside the visualization; anyone can audit the exact figures.
-
-<details>
-<summary><b>See the actual in-game research dashboard</b></summary>
-
-![In-game comparison generated by the browser engine](assets/research-panel.png)
-
-</details>
-
-### Research limitations
-
-- A toy **three-route** decision problem; no high-dimensional RL, neural network, or image understanding.
-- A fixed example map, intentionally asymmetric and not randomized per trial. The safe choice is easy to learn in this scenario.
-- Per-seed standard deviations describe *variation across these seeds*, **not** formal confidence intervals or proof of significance.
-- Policies consume different numbers of PRNG draws. A stronger causal comparison would separate the randomness driving environment events from policy sampling and use more scenario diversity.
-- The player can change traps between waves, making the deployed game nonstationary. The example laboratory freezes the map to isolate route adaptation.
+**Limitations:** This is explainable, lightweight online statistical adaptation, not an LLM or deep reinforcement learning model. Paired seeds guarantee repeatability, but policies can consume random numbers differently. A small number of seeds does not establish statistical superiority. Read [`docs/ISOMETRIC_DESIGN.md`](docs/ISOMETRIC_DESIGN.md) for rendering, click selection and future art pipeline details.
 
 ## Architecture
 
-```text
-trapscholar/
-├─ index.html                  # Accessible game UI + experimental laboratory
-├─ style.css                   # Responsive, dark pixel-game dashboard
-├─ src/
-│  ├─ brain.js                 # Risk estimates, softmax, exploration, observations
-│  ├─ engine.js                # Deterministic combat, economy, heroes, upgrades
-│  ├─ game.js                  # UI, audio, saves, animation and gameplay rendering
-│  ├─ pixel-art.js             # Cached 32×32 artwork, trap/hero variants, tile rendering
-│  └─ research.js              # Fixed-layout, continuous seeded research arena
-├─ tests/
-│  ├─ brain.test.mjs           # AI probability and observation tests
-│  ├─ engine.test.mjs          # Trap effects, save schema, deterministic live/batch parity
-│  └─ research.test.mjs        # Seed matching, complete experimental data, CSV
-├─ data/
-│  ├─ example-experiment.json  # Real generated deterministic runs
-│  └─ example-experiment.csv
-├─ assets/
-│  ├─ key-art.webp             # Original promotional scene (not a screenshot)
-│  ├─ logo.webp                # Original pixel-art logo
-│  ├─ gameplay-pixel-v1.1.png  # Real pixel-game screenshot
-│  ├─ raid-pixel-v1.1.png      # Real raid screenshot
-│  ├─ dashboard-pixel-v1.1.webp # Real dashboard screenshot
-│  ├─ cover.svg                # Original vector cover
-│  ├─ results-chart.svg        # Chart derived from the actual experiment
-│  ├─ architecture.svg         # Reproducibility diagram
-│  └─ ...                      # Genuine Chromium screenshots, favicon
-├─ scripts/
-│  ├─ start.ps1                # Local Windows web server
-│  ├─ test.ps1                 # Offline tests on Windows
-│  ├─ benchmark.mjs           # Regenerate sample data
-│  └─ plot.mjs                # Regenerate SVG from sample data
-├─ .github/workflows/tests.yml
-├─ LICENSE                    # MIT
-├─ CONTRIBUTING.md
-├─ CHANGELOG.md
-├─ VERIFICATION.md
-├─ SECURITY.md
-└─ LOCAL_AGENT_HANDOFF.md     # For a local coding LLM to continue if desired
+```mermaid
+flowchart TB
+    UI[index.html / style.css] --> GAME[src/game.js
+Campaign loop and UI]
+    GAME --> ART[src/isometric-renderer.js
+Runtime tile / hero / trap art]
+    ART --> PROJ[src/isometric.js
+Pure projection and hit testing]
+    GAME --> ENGINE[src/engine.js
+Pure, seeded combat rules]
+    ENGINE --> BRAIN[src/brain.js
+Online route learner]
+    GAME --> RESEARCH[src/research.js
+Deterministic comparisons]
+    RESEARCH --> ENGINE
+    GAME --> PIXEL[src/pixel-art.js
+Original sprite cache]
 ```
 
-### Engineering invariants
-
-1. **One rule source:** game animation and batch experiments call the same `makeHero`, `stepHero`, and `finishHero` functions. The experiment explicitly documents its different ward-reset rule.
-2. **Inspectable choices:** the learner's state, estimated danger, probabilities and actual outcomes are visible/exportable.
-3. **Reproducible core:** xorshift32 seeded randomness; deterministic JavaScript combat and experiments. Browser animation timing and timestamps are intentionally not deterministic.
-4. **Visual independence:** pixel sprites are generated/cached with Canvas 2D at runtime, separate from combat rules; the cover and logo are decorative assets only.
-5. **Safe untrusted input:** JSON import is bounded and validated; user messages in the event log are rendered via `textContent`, never executed as markup. No model/API secrets are used.
-6. **Lightweight by default:** no runtime libraries, no build pipeline, no analytics, no network requests. Tests use Node's built-in test runner.
+| Component | Goal |
+|---|---|
+| `src/isometric.js` | Projection math, inverse coordinate picking, collision-safe build region |
+| `src/isometric-renderer.js` | New isometric dungeon, platforms, lighting, traps, heroes and decorations |
+| `src/game.js` | UI, campaign phases, animation, saves, audio and browser controls |
+| `src/engine.js` + `src/brain.js` | Unchanged deterministic strategy rules / online learning |
+| `tests/isometric.test.mjs` | Validate projection inversion and pointer selection |
+| `scripts/browser_smoke.py` | Optional offline Chromium interaction smoke test |
 
 ## Verification
 
-See also the detailed [release verification report](VERIFICATION.md).
+- **32 passing Node tests** in the packaged source, including exact projection inversion for all grid coordinates and behavior tests for the unchanged engine.
+- Browser smoke test validated placing a spike trap through its projected diamond and launching a raid. No page-script exceptions were reported in the test harness.
+- Images in **Real gameplay** were captured by that harness from the actual renderer. The synthetic research experiment is separately labeled.
+- Windows native execution, long-play balancing, and real GitHub Pages deployment remain to be confirmed by project maintainers.
 
-| Check | Result |
-|---|---|
-| Node 22 unit tests | **26 passed** |
-| JavaScript syntax checks | Passed |
-| Chromium interaction harness | Trap placement, spending, pause, wave completion, graph updates, experiment, CSV export, valid-save import and reset passed |
-| Responsive browser check | 390 px mobile viewport, no horizontal overflow in harness |
-| Browser victory and endless transition | Wave-15 clear and Continue Endless button both passed |
-| Browser script errors | None observed in the harness |
-| Native Windows 11 / Edge execution | **Not yet verified on the target computer** |
+```bash
+# Browser smoke test (optional; requires Python playwright and local Chromium)
+python scripts/browser_smoke.py
+```
 
-Browser tests used an **inline-module harness** because the execution environment blocked direct localhost navigation. This does **not** replace a real static-server smoke test in Windows. The screenshots are from rendered browser interactions, not illustrations passed off as screenshots.
+### Host on GitHub Pages
 
-### GitHub Pages (optional)
+This is a static browser project: after publishing the repo, enable **Settings → Pages → Deploy from a branch → main → /(root)**. GitHub Pages is optional; no server backend or hosted API is used.
 
-Publish a static copy without needing a server. In the new repository open **Settings → Pages → Build and deployment → Deploy from a branch → `main` → `/ (root)`**. The game uses relative asset paths and does not require server-side code. Your actual Pages URL depends on your repository owner and its published settings.
+## Next art milestones
 
-## What to improve next
+Version 2 is a playable step toward the illustrated scene. Matching the illustrated key art **exactly** would take a coherent multi-angle sprite sheet pipeline, more unique animation frames, richer environmental tilesets, particles and lighting. See the continuation guide and design document; the current code intentionally avoids downloading third-party game assets without tracking licensing.
 
-- [x] Fully playable 15-wave campaign and endless continuation
-- [x] Four enemy archetypes, four traps, three upgrades, visual hit effects and opt-in sound
-- [x] Deterministic shared engine with unit tests and seeded experiment runner
-- [x] Campaign learning curves, transparent probabilities, exports and validated imports
-- [x] Responsive layout and keyboard-only placement option
-- [ ] More tactical hero behaviors (scouting, shields, branching movement and pathfinding)
-- [ ] Larger procedural arenas, multiple relic stages and more varied boss encounters
-- [ ] Better art animation, accessibility audit with screen readers, cross-browser mobile testing
-- [ ] Advanced research suite with varied scenarios, confidence intervals and fairer RNG pairing
-- [ ] Optional local LLM **dialogue only**, with the game still fully usable with it off
-- [ ] Independent Windows/Edge deployment verification and user playtesting
+## Credits and licensing
 
-## Credits, licensing and contributing
-
-TrapScholar's procedural game art, vector diagrams, audio oscillator effects and code are original to this project and distributed under **MIT**. **No third-party sprite packs, copyrighted game graphics, assets, models or audio clips are bundled.**
-
-The general idea belongs to the broad family of risk-aware online exploration methods and dungeon defense games. Relevant inspiration: [Kenney Tiny Dungeon](https://kenney.nl/assets/tiny-dungeon) (a potential external CC0 sprite source, **not currently bundled**) and open-source adaptive game agents. These projects have not reviewed or endorsed TrapScholar.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [CHANGELOG.md](CHANGELOG.md) and [LOCAL_AGENT_HANDOFF.md](LOCAL_AGENT_HANDOFF.md). Bug reports, design experiments and reproducibility fixes are welcome.
-
----
-
-<div align="center">
-
-**The dungeon changes its defenses. The heroes change their minds.**
-
-*TrapScholar · An offline game about adaptation, feedback and imperfect knowledge.*
-
-</div>
+Concept, implementation and project direction: **Ikteder Akhand Udoy** with AI-assisted development. Original project art and local Canvas graphics. Licensed under [MIT](LICENSE). See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [AGENTS.md](AGENTS.md) and [LOCAL_AGENT_HANDOFF.md](LOCAL_AGENT_HANDOFF.md).

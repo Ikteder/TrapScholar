@@ -2,19 +2,19 @@ import { LANES, LANE_NAMES, checkBrain, forecasts } from './brain.js';
 import { GAME_VERSION, TRAPS, HEROES, UPGRADES, MAX_WARD, canBuild, createRun, buyTrap, buyUpgrade,
   waveSize, makeHero, stepHero, finishHero, finishWave, validRun } from './engine.js';
 import { compare, resultsCSV, SCENARIO } from './research.js';
-import { drawPixelSprite } from './pixel-art.js';
+import { renderIsometric } from './isometric-renderer.js';
+import { pointerToCell, project } from './isometric.js';
 
 const $=id=>document.getElementById(id);
 const canvas=$('world'),ctx=canvas.getContext('2d',{alpha:false});
 ctx.imageSmoothingEnabled=false;
-const TILE=32,COLS=22,ROWS=13,SAVE_KEY='trapscholar-v2',OLD_KEY='trapscholar-v1';
+const SAVE_KEY='trapscholar-v2',OLD_KEY='trapscholar-v1';
 const COLORS=['#c596f5','#6de0cd','#f5b675'];
 const PREF_REDUCED=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches??false;
 const app={state:createRun(),selected:'spikes',phase:'build',active:null,queue:0,summary:null,delay:0,
   paused:false,speed:1,events:[],hovered:null,time:0,particles:[],floaters:[],shake:0,
   research:null,audio:false,audioContext:null};
 
-function isCorridor(x,y){return x>=1&&x<=20&&(LANES.includes(y)||((x===1||x===20)&&y>=3&&y<=9));}
 function log(message,tone='normal'){
   app.events.unshift({message:String(message).slice(0,260),tone,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
   app.events=app.events.slice(0,28);
@@ -165,13 +165,13 @@ function heroFinish(survived){
   if(survived){
     app.summary.breaches++;
     log(`${HEROES[h.className].label} breached via ${LANE_NAMES[h.lane]}! Wards: ${app.state.ward}.`,'bad');
-    addFloater(20*TILE,6*TILE,'−1 WARD','#ff9fa8');burst(20*TILE+16,6*TILE+16,'#df6a8f',18);
+    addFloater(project(20,6).x,project(20,6).y-42,'−1 WARD','#ff9fa8');burst(project(20,6).x,project(20,6).y-20,'#df6a8f',18);
     sfx('breach');
   }else{
     app.summary.kills++;
     log(`${HEROES[h.className].label} fell in ${LANE_NAMES[h.lane]}! +${2+(app.state.upgrades.forge?1:0)} souls.`,'good');
-    addFloater(last.x*TILE,last.y*TILE,'+SOULS','#8cf4bc');
-    burst(last.x*TILE+16,last.y*TILE+16,'#bb9aff',16);sfx('defeat');
+    addFloater(project(last.x,last.y).x,project(last.x,last.y).y-38,'+SOULS','#8cf4bc');
+    burst(project(last.x,last.y).x,project(last.x,last.y).y-20,'#bb9aff',16);sfx('defeat');
   }
   app.active=null;
   if(app.state.ward<=0){
@@ -220,116 +220,19 @@ function animate(dt){
     for(const event of result.events){
       if(event.type==='hit'){
         const cell=event.cell;
-        addFloater(cell.x*TILE+5,cell.y*TILE+6,`−${event.amount}`,TRAPS[event.source].color);
-        burst(cell.x*TILE+16,cell.y*TILE+16,TRAPS[event.source].color,9);
+        addFloater(project(cell.x,cell.y).x,project(cell.x,cell.y).y-32,`−${event.amount}`,TRAPS[event.source].color);
+        burst(project(cell.x,cell.y).x,project(cell.x,cell.y).y-16,TRAPS[event.source].color,9);
         app.shake=.4;sfx('hit');
-      } else if(event.amount) addFloater(h.route[h.index].x*TILE+6,h.route[h.index].y*TILE,`−${event.amount}`,'#a8e9d7');
+      } else if(event.amount) addFloater(project(h.route[h.index].x,h.route[h.index].y).x,project(h.route[h.index].x,h.route[h.index].y).y-26,`−${event.amount}`,'#a8e9d7');
     }
     if(result.done){heroFinish(result.survived);break;}
   }
 }
-function rect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),w,h);}
-function disk(x,y,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();}
-function drawTrap(x,y,kind){
-  const px=x*TILE,py=y*TILE;
-  drawPixelSprite(ctx,kind,px,py);
-  if(!PREF_REDUCED){
-    const shimmer=.5+.5*Math.sin(app.time*4+x*1.7+y*.9);
-    if(kind==='bolt'){
-      ctx.globalAlpha=.3+shimmer*.4;
-      rect(px+15,py+10,3,3,'#fff0ff');rect(px+16,py+6,1,5,'#dba7ff');
-    } else if(kind==='venom') {
-      ctx.globalAlpha=.25+shimmer*.55;
-      rect(px+24,py+6,2,2,'#c5ffc5');rect(px+6,py+13,2,2,'#c5ffc5');
-    } else if(kind==='frost') {
-      ctx.globalAlpha=.25+shimmer*.4;
-      rect(px+16,py+7,2,3,'#ffffff');
-    } else if(kind==='spikes'){
-      ctx.globalAlpha=.2+shimmer*.25;
-      rect(px+9,py+12,1,7,'#ffffff');
-    }
-    ctx.globalAlpha=1;
-  }
-  if(app.state.upgrades.power&&['spikes','bolt'].includes(kind))rect(px+4,py+4,3,3,'#ffcf75');
-}
-function drawHero(h){
-  const a=h.route[h.index],b=h.route[Math.min(h.index+1,h.route.length-1)];
-  const x=(a.x+(b.x-a.x)*h.progress)*TILE;
-  const y=(a.y+(b.y-a.y)*h.progress)*TILE;
-  const bob=PREF_REDUCED?0:Math.round(Math.sin(app.time*12*app.speed)*2);
-  const step=!PREF_REDUCED&&Math.floor(app.time*7*app.speed)%2===1;
-  const variant=`hero-${h.className}${step?'-walk':''}`;
-  drawPixelSprite(ctx,variant,x,y+bob);
-  if(h.counter){ctx.save();ctx.globalAlpha=.4;rect(x+9,y+14+bob,16,9,'#a5d9ff');ctx.restore();}
-  if(h.dots.some(d=>d.source==='venom')){
-    rect(x+27,y+6,3,3,'#b1fd8d');rect(x+3,y+8,2,2,'#73d988');
-  }
-  if(h.dots.some(d=>d.source==='frost')){
-    rect(x+3,y+23,3,3,'#a2f2ff');rect(x+26,y+20,2,2,'#b8fcff');
-  }
-  const ratio=Math.max(0,h.hp/h.maxHp);
-  rect(x+2,y-4,28,4,'#161826');rect(x+3,y-3,26,2,'#512e43');
-  rect(x+3,y-3,Math.round(26*ratio),2,ratio>.4?'#86f2a5':'#ff718c');
-}
 function drawWorld(){
-  ctx.save();ctx.imageSmoothingEnabled=false;
-  if(app.shake>0&&!PREF_REDUCED){const amount=app.shake*2;ctx.translate(Math.round(Math.sin(app.time*73)*amount),Math.round(Math.cos(app.time*89)*amount));}
-  rect(0,0,canvas.width,canvas.height,'#0d1220');
-  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
-    const px=x*TILE,py=y*TILE,corridor=isCorridor(x,y);
-    if(corridor){
-      drawPixelSprite(ctx,canBuild(x,y)?'floor-build':'floor',px,py,(x*11+y*29)%8);
-      // Subtle lane-color reading, carefully below the playable trap sprite layer.
-      if(LANES.includes(y)&&x>=2&&x<=19){
-        rect(px+3,py+29,26,1,COLORS[LANES.indexOf(y)]+'80');
-      }
-    } else {
-      drawPixelSprite(ctx,'wall',px,py,(x*7+y*17)%13);
-      if((x*3+y*7)%21===0&&x>1&&x<COLS-2&&y>0&&y<ROWS-1)drawPixelSprite(ctx,'rune',px,py);
-    }
-  }
-  // Pixelated gothic architecture is deliberately decorative and never changes collision.
-  for(let i=0;i<3;i++){
-    const y=LANES[i],py=y*TILE;
-    drawPixelSprite(ctx,'torch',0,py);
-    drawPixelSprite(ctx,'banner',21*TILE,py);
-    rect(2*TILE,py+30,18*TILE,1,COLORS[i]+'65');
-  }
-  drawPixelSprite(ctx,'gate',1*TILE,6*TILE);
-  drawPixelSprite(ctx,'vault',20*TILE,6*TILE);
-  // Decorative flicker and starbursts around the relic use solid pixels (not blurred images).
-  if(!PREF_REDUCED){
-    const pulse=.5+.5*Math.sin(app.time*3.2);
-    ctx.save();ctx.globalAlpha=.25+pulse*.6;
-    rect(20*TILE+16,6*TILE+4,2,4,'#fff9d8');
-    rect(20*TILE+3,6*TILE+16,3,2,'#e3afff');
-    rect(20*TILE+27,6*TILE+9,3,2,'#ffde98');
-    ctx.restore();
-  }
-  for(const [pos,kind] of Object.entries(app.state.traps)){
-    const [x,y]=pos.split(',').map(Number);drawTrap(x,y,kind);
-  }
-  if(app.hovered&&canBuild(app.hovered.x,app.hovered.y)&&app.phase==='build'){
-    const {x,y}=app.hovered;
-    ctx.strokeStyle=TRAPS[app.selected]?.color||'#e9c6ff';ctx.lineWidth=2;
-    ctx.strokeRect(x*TILE+2,y*TILE+2,TILE-4,TILE-4);
-    if(TRAPS[app.selected]&&!app.state.traps[`${x},${y}`]){ctx.save();ctx.globalAlpha=.7;drawTrap(x,y,app.selected);ctx.restore();}
-  }
-  if(app.active)drawHero(app.active);
-  for(const p of app.particles){ctx.save();ctx.globalAlpha=Math.max(0,Math.min(1,p.life/p.max));rect(p.x,p.y,p.size,p.size,p.color);ctx.restore();}
-  ctx.textAlign='center';ctx.font='bold 13px ui-monospace,monospace';
-  for(const f of app.floaters){ctx.save();ctx.globalAlpha=Math.min(1,Math.max(0,f.life));ctx.fillStyle=f.color;ctx.fillText(f.label,f.x+16,f.y);ctx.restore();}
-  if(app.phase==='lost'||app.phase==='won'){
-    rect(0,0,canvas.width,canvas.height,app.phase==='lost'?'#180b20bd':'#092525bb');
-    ctx.fillStyle=app.phase==='lost'?'#ffb8ce':'#b5f9c9';ctx.textAlign='center';
-    ctx.font='bold 34px ui-monospace,monospace';ctx.fillText(app.phase==='lost'?'RELIC LOST':'VICTORY!',canvas.width/2,canvas.height/2);
-    ctx.font='14px ui-monospace,monospace';ctx.fillText(app.phase==='lost'?'Reset and try a new defense':'Fifteen waves survived',canvas.width/2,canvas.height/2+32);
-  }
-  if(app.paused&&app.phase==='raid'){
-    rect(0,0,canvas.width,canvas.height,'#050d1a9b');ctx.fillStyle='#ead3ff';ctx.font='bold 30px monospace';ctx.textAlign='center';
-    ctx.fillText('PAUSED',canvas.width/2,canvas.height/2);
-  }
-  ctx.restore();
+  renderIsometric(ctx,{traps:app.state.traps,hero:app.active,hovered:app.hovered,
+    selected:app.selected,phase:app.phase,time:app.time,reduced:PREF_REDUCED,
+    power:app.state.upgrades.power,forecast:forecasts(app.state.brain),
+    particles:app.particles,floaters:app.floaters,paused:app.paused});
 }
 function chartLine(ctx,series,points,colors,maxY=1){
   const left=42,top=14,right=points.width-16,bottom=points.height-28;
@@ -460,16 +363,18 @@ function research(){
   },0));
 }
 let last=0;function frame(now){
+  if(last&&now-last<1000/30){requestAnimationFrame(frame);return;}
   const dt=last?Math.min(.06,(now-last)/1000):0;last=now;
   animate(dt);drawWorld();requestAnimationFrame(frame);
 }
 canvas.addEventListener('pointermove',event=>{
-  const r=canvas.getBoundingClientRect();
-  app.hovered={x:Math.floor((event.clientX-r.left)/r.width*COLS),y:Math.floor((event.clientY-r.top)/r.height*ROWS)};
+  app.hovered=pointerToCell(event.clientX,event.clientY,canvas.getBoundingClientRect());
+  canvas.style.cursor=app.phase==='build'&&app.hovered&&canBuild(app.hovered.x,app.hovered.y)?'crosshair':'default';
 });
-canvas.addEventListener('pointerleave',()=>{app.hovered=null;});
+canvas.addEventListener('pointerleave',()=>{app.hovered=null;canvas.style.cursor='default';});
 canvas.addEventListener('click',event=>{
-  const r=canvas.getBoundingClientRect();placeAt(Math.floor((event.clientX-r.left)/r.width*COLS),Math.floor((event.clientY-r.top)/r.height*ROWS));
+  const tile=pointerToCell(event.clientX,event.clientY,canvas.getBoundingClientRect());
+  if(tile)placeAt(tile.x,tile.y);
 });
 for(const tool of document.querySelectorAll('.tool'))tool.addEventListener('click',()=>{app.selected=tool.dataset.tool;renderUI();});
 for(const el of document.querySelectorAll('.upgrade'))el.addEventListener('click',()=>upgrade(el.dataset.upgrade));

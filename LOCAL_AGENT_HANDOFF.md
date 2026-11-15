@@ -1,49 +1,47 @@
-# TrapScholar v1.0 — continuation handoff for your local coding LLM
+# TrapScholar v2 — local coding-agent handoff
 
-## Current state
+## State of the project
 
-A complete, working, model-free, browser-playable pixel game with source at `index.html`, `style.css`, and `src/*.js`. It contains: 15-wave victory with endless continuation, 4 traps, 4 hero classes, 3 upgrades, adaptive route learner, Web Audio opt-in, battle particles, responsive UI, per-wave graph, save/import, and reproducible policy comparison. Existing code is not a scaffold.
+Playable v2.0 isometric pixel edition is implemented. Start from THIS source, not a blank Godot / Unity project. The game renders a raised three-route stone dungeon in Canvas 2D; trap placement, hero raids, campaign, save/import, AI learning and seeded laboratory remain operational. Do not confuse concept illustrations with actual runtime graphics.
 
-## Verified in the creation environment
+## Starting on Windows
 
-- `npm test`: 26 passing unit tests (Node 22).
-- `npm run benchmark` followed by `node scripts/plot.mjs`: generated valid CSV/JSON and SVG sample results.
-- Chromium inline-module harness: trap placement, spending, pause/resume, wave completion, probability-chart update, seeded lab run, CSV download, JSON import, reset — **no page errors**.
-- 390 px simulated mobile viewport: no horizontal overflow.
-- The environment blocked direct localhost navigation by admin policy. Native Windows 11 / Edge static-server verification is not yet complete.
+```powershell
+cd F:\AI\TrapScholar
+.\scripts\start.ps1
+# Browser http://127.0.0.1:8080
+# Another PowerShell terminal:
+npm test
+```
 
-## IMPORTANT: Do not redo finished work
+Node >=20 and Python >=3 are enough. If the repository has been cloned previously, update it with git pull or extract the latest release archive before starting. Save import/export format remains compatible with v1.x.
 
-Read the README, then inspect these files in this order: `src/brain.js`, `src/engine.js`, `src/research.js`, `tests/`, `src/game.js`. Start by running tests, not by rewriting. Existing icons, cover, screenshots and experiment chart are already committed in source files. No GPU or inference server is needed.
+## Things already finished
 
-## Your first milestone — native Windows verification
+- `src/isometric.js`: mathematically invertible projection and collision-safe diamond selection.
+- `src/isometric-renderer.js`: environment, stone cliffs, torches, banners, original sprites, traps, relic, visual hit effects.
+- `src/game.js`: wired all old gameplay and screen effects to the isometric world.
+- `tests/isometric.test.mjs`: projection, view picking and engine rules.
+- `scripts/browser_smoke.py`: optional browser interaction smoke testing (needs Playwright + Chromium).
+- Original pixel assets and README art; promotional cover distinct from gameplay screenshot.
+- Existing `brain.js`, `engine.js`, `research.js`, data fixtures and GitHub CI remain the source of truth.
 
-1. On Windows 11, extract the archive to a chosen project directory (for example `F:\AI\trapscholar`).
-2. In modern PowerShell: `npm test`, `npm run benchmark`, `node scripts/plot.mjs`.
-3. Start `./scripts/start.ps1` and open `http://127.0.0.1:8080` in Microsoft Edge or Chrome.
-4. Test placement on all three paths, sound on/off, pause/resume, three waves, reset, keyboard-only placement, save export/import and mobile responsive mode.
-5. Confirm screenshot visuals match real gameplay and review the browser Console for errors. Fix only verified defects. **Do not delete user files.**
+## Required continuation order
 
-## Future milestones, in order
+1. **Verify local Windows functionality before editing.** Run scripts/start.ps1, place a trap on a purple socket, launch a wave, confirm UI, research lab, save, pause and audio. Run `npm run check`.
+2. **Improve visual consistency without changing combat rules.** Create coherent isometric tile/sprite sheets with original licensed art. Implement 4-direction hero sprites, damage/death animation, richer trap animation. Keep readability at mobile scale and use offscreen sprite caches.
+3. **Polish controls and scene readability.** Hover tooltips, tile affordance, focus navigation, attack effects, camera zoom option; do not let decorative platforms become clickable build slots.
+4. **Extend gameplay only after tests pass.** Boss encounters, more maps, varied wave behavior and 2.5D dungeon editor are reasonable next steps.
+5. **Benchmark changes.** Preserve 32 existing tests and deterministic experiment fixtures; add tests for any gameplay change. Never present illustrative chart numbers as measured ML results.
 
-A. **v1.1 polish:** Add animated victory screen, additional role-specific animations, tutorial overlay, better in-game tooltips and localized accessibility announcements. Preserve low resource requirements.
+## Constraints
 
-B. **v1.2 tactical expansion:** Introduce one new tactical choice that visibly responds to player traps (e.g., one-use scout signal or counter-trap potion). Keep the route learner non-omniscient. Expose this in the UI and test it.
+- Offline-first; no cloud LLM or paid APIs required. The user's desktop can run a local LLM, but it should not be mandatory for this game.
+- Make small commits; avoid rewriting the working simulation. Prefer Python/Node tooling already available.
+- Validate Windows PowerShell, not only Linux shells. Avoid removing user save data or changing save key semantics.
+- Track original artwork provenance in `docs/ISOMETRIC_DESIGN.md` and maintain an honest README showing actual gameplay, not just promotional artwork.
+- Main goal: approach the polished isometric pixel illustration in visual style while keeping a genuinely playable strategy game.
 
-C. **v1.3 reproducibility:** Expand fixed scenario into a seeded layout suite with parameter sweep, multi-seed stats and uncertainty, matched exogenous randomness and written interpretation. Don't overstate significance.
+## Next review checkpoint
 
-D. **Optional local AI dialogue:** Connect localhost OpenAI-compatible endpoint only for optional safe flavor dialogue, not combat. Feature must be OFF by default, cached and cancellable. Never inject untrusted model text via innerHTML.
-
-E. **Publish only with approval:** If user requests, upload to a new GitHub repo; enable GitHub Pages; add release notes and screenshots. Never push without user's request.
-
-## Constraints and conventions
-
-- Maintain plain HTML/CSS/JavaScript with **no runtime dependencies**, offline static serving and MIT licensing.
-- Keep the campaign live stepper and experiment arena using the same `src/engine.js` combat rules; any intentionally different experiment condition (currently ward restoration) must be documented and unit-tested.
-- Keep user-visible conclusions based on real data. `data/example-experiment.json` contains real deterministic synthetic game outcomes, **not** real-world AI performance.
-- Preserve save version 2 and migrate it explicitly if schema changes; old browser saves should remain untouched.
-- No copied sprites or unlicensed commercial assets. Avoid long context dumps and large downloads.
-
-## v1.1 continuation note
-
-The v1.1 pixel-art overhaul adds `src/pixel-art.js` (self-contained Canvas 2D art generation), replaces core canvas rendering and adds `tests/pixel-art.test.mjs`. The browser header now references `assets/key-art.webp` and the README references `assets/logo.webp`. These are promotional images, NOT game sprites. The actual sprites are 32×32 procedural cached canvases with zero runtime image fetches. Do not replace them with isometric cover art unless you deliberately rework the game's board geometry and hit testing. Preserve `src/brain.js`, `src/engine.js`, and `src/research.js` invariants. Run `npm run check` before every commit.
+Deliver a screenshot and a short test report after improving one hero spritesheet and one complete tile family; compare the screenshot against `assets/isometric-raid.webp`. Do not claim an image-generation output is playable until it is connected to controls and interactions.
